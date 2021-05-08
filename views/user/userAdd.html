@@ -39,24 +39,20 @@
 					<input type="radio" name="gender" value="女" title="女">
 				  </div>
 				</div>
-			   <div class="layui-form-item">
-			      <label class="layui-form-label">角色：</label>
-			      <div class="layui-input-block" style="width: 300px;">
-			        <select name="roleName" required="true">
-			          <option value=""></option>
-			          <option value="0">超级管理员</option>
-			          <option value="1" selected="">教师</option>
-			        </select>
-			      </div>
-			    </div>
+			<div class="layui-form-item">
+				<label class="layui-form-label" >角色：</label>
+				<div class="layui-input-block" id="roleType">
+
+				</div>
+			</div>
 
 			<div class="layui-form-item">
 				<label class="layui-form-label">部门：</label>
 				<div class="layui-input-block" style="width: 300px;">
-					<select name="departId" required="true">
+					<select id="departId" name="departId" required="true">
 						<option value=""></option>
 						<option value="100">教务处</option>
-						<option value="101" selected="">信息工程学院</option>
+						<option value="101">信息工程学院</option>
 						<option value="102">计算机科学与技术专业</option>
 						<option value="103">通信工程专业</option>
 						<option value="104">软件工程专业</option>
@@ -67,10 +63,10 @@
 			<div class="layui-form-item">
 				<label class="layui-form-label">职务：</label>
 				<div class="layui-input-block" style="width: 300px;">
-					<select name="jobId" required="true">
+					<select id="jobId" name="jobId" required="true">
 						<option value=""></option>
 						<option value="100">教务处处长</option>
-						<option value="101" selected="">院长</option>
+						<option value="101">院长</option>
 						<option value="102">教研室主任</option>
 						<option value="103">普通教员</option>
 					</select>

@@ -69,16 +69,21 @@ func(c *UserConn) Add(){
 		user.JobId,_ = strconv.Atoi(c.GetString("jobId"))
 		user.DepartId,_ = strconv.Atoi(c.GetString("departId"))
 		user.CreateTime = time.Now()
-		ur := models.UserRole{}
-		ur.RoleId,_ = strconv.Atoi(c.GetString("roleName"))
 
 		id,_ := models.AddUser(&user)
-		ur.UserId = int(id)
-		if _,err :=models.AddUserRole(&ur); err != nil {
-			c.Data["json"] = 0
-		} else {
-			c.Data["json"] = 1
+		rolel := models.GetAllRole()
+		models.DeleteUserRoleU(int(id))
+		for _,v := range rolel {
+			ro := "role" + strconv.Itoa(v.Id)
+			if c.GetString(ro) != "" {
+				tmp:=models.UserRole{
+					UserId: int(id),
+					RoleId: v.Id,
+				}
+				models.AddUserRole(&tmp)
+			}
 		}
+		c.Data["json"] = 1
 		c.ServeJSON()
 	}
 }

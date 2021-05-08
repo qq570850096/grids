@@ -276,7 +276,34 @@
 						type: 2,
 						title: '添加用户',
 						area: ['50%', '90%'],
-						content: '/user/Add'
+						content: '/user/Add',
+						end: function() {
+							location.reload();
+						},
+						success: function(layero, index){
+							$.ajax({
+								url:'/role/roleList',
+								dataType:'json',
+								type:'get',
+								success:function(objs){
+									var iframeWin = window[layero.find('iframe')[0]['name']];
+									var body = layer.getChildFrame('body', index); //取子页面数据
+									var labelTypes = objs.list;
+									$.each(labelTypes, function (index, item) {
+										body.contents().find("#roleType").append('<input type="checkbox"  id="role'+ item.Id +'" name="role'+ item.Id +'"  value="' + item.Id + '" title="' + item.RoleName + '">');
+									});
+									iframeWin.layui.form.render();
+									var roles = objs.role;
+									$.each(roles,function (index, itme) {
+										var id = "#role" + itme.Id;
+										console.log(id)
+										body.contents().find(id).prop("checked",true)
+									})
+									iframeWin.layui.form.render();
+								}
+							});
+						}
+
 					});
 
 // 					form.render();
