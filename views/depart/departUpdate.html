@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<link rel="stylesheet" href="../../static/layui/css/layui.css" media="all">
+	</head>
+	<body>
+
+		<form class="layui-form" action="" onsubmit="return false" style="height: auto; margin-left: 20%;">
+			<div class="layui-form-item">
+				<div class="layui-input-inline">
+					<input type="hidden" name="id" id="id" class="layui-input">
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">部门名称：</label>
+				<div class="layui-input-inline">
+					<input type="text" name="departName" id="departName" class="layui-input" required="true">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">上级部门：</label>
+				<div class="layui-input-block" style="width: 190px;">
+					<select name="superiorName" required="true">
+						<option value=""></option>
+						<option value="0">教务处</option>
+						<option value="1" selected="">信息工程学院</option>
+						<option value="2">计算机科学与技术专业</option>
+						<option value="3">通信工程专业</option>
+						<option value="4">软件工程专业</option>
+					</select>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">部门类型：</label>
+				<div class="layui-input-block" style="width: 190px;">
+					<select name="typeName" required="true">
+						<option value=""></option>
+						<option value="0">学院</option>
+						<option value="1" selected="">专业</option>
+					</select>
+				</div>
+			</div>
+
+
+
+			<div class="layui-form-item">
+				<div class="layui-input-block">
+					<button class="layui-btn" lay-submit lay-filter="updateSubmit">立即提交</button>
+					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				</div>
+			</div>
+		</form>
+		<script src="../../static/layui/layui.js" charset="utf-8"></script>
+	</body>
+</html>

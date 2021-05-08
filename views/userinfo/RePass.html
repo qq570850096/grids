@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		 <link rel="stylesheet" href="../../static/layui/css/layui.css" media="all">
+	</head>
+	<body>
+		<form class="layui-form" action="" onsubmit="return false" style="height: auto;">
+		    <div class="layui-form-item">
+		        <div class="layui-input-inline">
+		            <input type="hidden" name="id" id="id" class="layui-input">
+		        </div>
+		    </div>
+							  
+			  <div class="layui-form-item">
+				 <label class="layui-form-label">原密码：</label>
+				  <div class="layui-input-inline">
+					  <input type="password" name="password" id="password" class="layui-input" placeholder="请输入原密码">
+				  </div>
+			  </div>
+			  <div class="layui-form-item">
+				  <label class="layui-form-label">新密码：</label>
+				  <div class="layui-input-inline">
+					  <input type="password" name="Npassword" id="Npassword" class="layui-input" placeholder="请输入新密码">
+				  </div>
+			  </div>
+			  <div class="layui-form-item">
+				  <label class="layui-form-label">确认密码：</label>
+				  <div class="layui-input-inline">
+					  <input type="password"  lay-verify="confirmPass" name="confirm" id="confirm" class="layui-input" placeholder="请再次输入密码" onkeyup="checkpassword()">
+					  <span id="tishi"></span>
+				  </div>
+			  </div> 
+		    <div class="layui-form-item">
+			  <div class="layui-input-block">
+				  <button class="layui-btn" id="submit" lay-submit lay-filter="formDemo">立即提交</button>
+				  <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+			  </div>
+		  </div>
+		</form>
+		
+		<script src="../../static/layui/layui.js" charset="utf-8"></script>
+		<script src="../../static/jquery/jquery-3.5.1.min.js"></script>
+		<script>
+			layui.use(['layer', 'form'], function(){
+			  var layer = layui.layer
+			  ,form = layui.form;
+			
+			  window.checkpassword = function(){
+				  var password = document.getElementById("Npassword").value;
+				  var repassword = document.getElementById("confirm").value;
+				  		
+				  if(password == repassword) {
+				  	document.getElementById("tishi").innerHTML="<br><font color='green'>两次密码输入一致</font>";
+				  	document.getElementById("submit").disabled = false;
+				  		
+				  }else {
+				  	document.getElementById("tishi").innerHTML="<br><font color='red'>两次输入密码不一致!</font>";
+				  	document.getElementById("submit").disabled = true;
+				  }
+			  } 
+			
+			});
+			
+				
+
+		</script>
+	</body>
+
+</html>

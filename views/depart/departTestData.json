@@ -1,0 +1,31 @@
+{
+	"code": 0,
+	"msg": "",
+	"count": 1000,
+    "data": [
+        {
+            "departId": "1",
+            "departName": "教务处",
+            "superiorName": "",
+			"typeName": "",
+			"createTime": "2021-05-02 01:34:09" ,
+			"modifiedTime" : ""
+        },
+        {
+            "departId": "2",
+            "departName": "信息工程学院",
+            "superiorName": "",
+			"typeName": "学院",
+			"createTime": "2021-05-02 01:34:09" ,
+			"modifiedTime" : "2021-05-03 01:34:09"
+        },
+        {
+            "departId": "3",
+            "departName": "软件工程专业",
+            "superiorName": "信息工程学院",
+			"typeName": "专业",
+			"createTime": "2021-05-02 01:34:09" ,
+			"modifiedTime" : ""
+        }
+    ]
+}

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<link rel="stylesheet" href="../../static/layui/css/layui.css" media="all">
+	</head>
+	<body>
+
+		<form class="layui-form" action="" onsubmit="return false" style="height: auto; margin-left: 20%;">
+			<div class="layui-form-item">
+				<div class="layui-input-inline">
+					<input type="hidden" name="processId" id="processId" class="layui-input">
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">流程名称：</label>
+				<div class="layui-input-inline">
+					<input type="text" name="processName" id="processName" class="layui-input" required="true">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">启用职务：</label>
+				<div class="layui-input-block" style="width: 190px;">
+					<select name="jobName" required="true">
+						<option value=""></option>
+						<option value="0">教务处处长</option>
+						<option value="1" selected="">学院院长</option>
+						<option value="2">教研室主任</option>
+						<option value="3">普通教员</option>
+					</select>
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">流程类型：</label>
+				<div class="layui-input-block">
+					<input type="radio" name="processType" value="指派" title="指派" checked="">
+					<input type="radio" name="processType" value="申请" title="申请">
+				</div>
+			</div>
+
+
+			<div class="layui-form-item">
+				<div class="layui-input-block">
+					<button class="layui-btn" lay-submit lay-filter="addSubmit">立即提交</button>
+					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				</div>
+			</div>
+		</form>
+		<script src="../../static/layui/layui.js" charset="utf-8"></script>
+	</body>
+</html>

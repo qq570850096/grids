@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<link rel="stylesheet" href="../../static/layui/css/layui.css" media="all">
+	</head>
+	<body>
+		
+		<form class="layui-form" action="" onsubmit="return false" style="height: auto; margin-left: 20%;" >
+		    <div class="layui-form-item">
+		        <div class="layui-input-inline">
+		            <input type="hidden" name="userId" id="userId" class="layui-input">
+		        </div>
+		    </div>
+							  
+			  <div class="layui-form-item">
+				 <label class="layui-form-label">账号：</label>
+				  <div class="layui-input-inline">
+					  <input type="text" name="userName" id="userName" class="layui-input" required="true">
+				  </div>
+			  </div>
+			  <div class="layui-form-item">
+				 <label class="layui-form-label">姓名：</label>
+				  <div class="layui-input-inline">
+					  <input type="text" name="realName" id="realName" class="layui-input" required="true">
+				  </div>
+			  </div>
+			  <div class="layui-form-item">
+				 <label class="layui-form-label">密码：</label>
+				  <div class="layui-input-inline">
+					  <input type="password" name="password" id="password" class="layui-input" required="true">
+				  </div>
+			  </div>
+			  <div class="layui-form-item">
+				  <label class="layui-form-label">性别：</label>
+				  <div class="layui-input-block">
+					<input type="radio" name="gender" value="男" title="男" checked="">
+					<input type="radio" name="gender" value="女" title="女">
+				  </div>
+				</div>
+			   <div class="layui-form-item">
+			      <label class="layui-form-label">角色：</label>
+			      <div class="layui-input-block" style="width: 300px;">
+			        <select name="roleName" required="true">
+			          <option value=""></option>
+			          <option value="0">超级管理员</option>
+			          <option value="1" selected="">教师</option>
+			        </select>
+			      </div>
+			    </div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">部门：</label>
+				<div class="layui-input-block" style="width: 300px;">
+					<select name="departId" required="true">
+						<option value=""></option>
+						<option value="100">教务处</option>
+						<option value="101" selected="">信息工程学院</option>
+						<option value="102">计算机科学与技术专业</option>
+						<option value="103">通信工程专业</option>
+						<option value="104">软件工程专业</option>
+					</select>
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">职务：</label>
+				<div class="layui-input-block" style="width: 300px;">
+					<select name="jobId" required="true">
+						<option value=""></option>
+						<option value="100">教务处处长</option>
+						<option value="101" selected="">院长</option>
+						<option value="102">教研室主任</option>
+						<option value="103">普通教员</option>
+					</select>
+				</div>
+			</div>
+			  <div class="layui-form-item">
+				  <label class="layui-form-label">电话：</label>
+				  <div class="layui-input-inline">
+					  <input type="text" lay-verify="phone" name="phone" id="phone" class="layui-input" required="false">
+				  </div>
+			  </div>
+							  
+		    <div class="layui-form-item">
+			  <div class="layui-input-block">
+				  <button class="layui-btn" lay-submit lay-filter="addSubmit">立即提交</button>
+				  <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+			  </div>
+		  </div>
+		</form>
+		<script src="../../static/layui/layui.js" charset="utf-8"></script>
+	<script>
+		layui.use('form', function(){
+			var form = layui.form;
+			var $ = layui.$;
+			form.on('submit(addSubmit)', function(data){
+				$.ajax({
+					url:'/user/Add',
+					data: data.field,
+					dataType:'json',
+					type:'post',
+					success:function(data){
+						layer.msg("success")
+					}
+				})
+			});
+		})
+	</script>
+	</body>
+</html>

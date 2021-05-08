@@ -1,0 +1,28 @@
+{
+	"code": 0,
+	"msg": "",
+	"count": 1000,
+    "data": [
+        {
+            "jobId": "1",
+            "jobName": "教务处处长",
+            "superiorName": "",
+			"createTime": "2021-05-02 01:34:09" ,
+			"modifiedTime" : ""			
+        },
+        {
+            "jobId": "2",
+            "jobName": "学院院长",
+            "superiorName": "",
+			"createTime": "2021-05-02 01:34:09" ,
+			"modifiedTime" : "2021-05-03 01:34:09"	
+        },
+        {
+            "jobId": "3",
+            "jobName": "教研室主任",
+            "superiorName": "学院院长",
+			"createTime": "2021-05-02 01:34:09" ,
+			"modifiedTime" : ""	
+        }
+    ]
+}

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="renderer" content="webkit">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+		<title>大学教学管理系统</title>
+		<link rel="stylesheet" href="../static/layui/css/layui.css" media="all">
+		
+	</head>
+
+	<body>
+		<div class="layui-layout layui-layout-admin">
+			<div class="layui-header">
+				<div class="layui-logo">大学教学管理系统</div>
+				<ul class="layui-nav layui-layout-right">
+					<li class="layui-nav-item">
+						<a href="javascript:;">
+							<img src="//tva1.sinaimg.cn/crop.0.0.118.118.180/5db11ff4gw1e77d3nqrv8j203b03cweg.jpg" class="layui-nav-img">
+							用户名
+						</a>
+						<dl class="layui-nav-child">
+							<dd><a style="cursor: pointer;" id="Info" class="unTab">个人中心</a></dd>
+							<dd><a style="cursor: pointer;" id="RePass" class="unTab">修改密码</a></dd>
+						</dl>
+					</li>
+					<li class="layui-nav-item"><a href="login.html">退出</a></li>
+				</ul>
+			</div>
+
+			<div class="layui-side layui-bg-black">
+				<div class="layui-side-scroll">
+					<ul class="layui-nav layui-nav-tree" lay-filter="menu">
+						<li class="layui-nav-item">
+							<a href="javascript:;">系统管理</a>
+							<dl class="layui-nav-child">
+								<dd><a href="user/userList" id="1">用户管理</a></dd>
+								<dd><a href="depart/departList.html" id="2">部门管理</a></dd>
+								<dd><a href="job/jobList.html" id="3">职务管理</a></dd>
+								<dd><a href="process/processList.html" id="4">流程管理</a></dd>
+							</dl>
+						</li>
+						<li class="layui-nav-item">
+							<a href="javascript:;">教学任务管理</a>
+							<dl class="layui-nav-child">
+								<dd><a href="mission/myMission.html" id="5">任务消息</a></dd>
+								<dd><a href="mission/workPlace.html" id="6">任务模块</a></dd>
+								<dd><a href="mission/applyPlace.html" id="7">申请模块</a></dd>
+							</dl>
+						</li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="layui-body">
+				<!--主体区域-->
+				<div class="layui-tab" lay-filter="tab" lay-allowClose="true">
+					<ul class="layui-tab-title">
+						<li class="layui-this">欢迎页</li>
+					</ul>
+					<div class="layui-tab-content">
+						<div class="layui-tab-item layui-show" style="color: #009688;font-size: xx-large ;text-align: center;margin-top: 15%;">
+							欢  迎  使  用  本  系  统
+						</div>
+					</div>
+				</div>
+			</div>
+
+
+		</div>
+		<script src="../static/layui/layui.js" charset="utf-8"></script>
+		<script src="../static/jquery/jquery-3.5.1.min.js"></script>
+		<script src="../static/js/index.js"></script>
+
+
+	</body>
+</html>

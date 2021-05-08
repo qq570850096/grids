@@ -1,0 +1,43 @@
+{
+	"code": 0,
+	"msg": "",
+	"count": 1000,
+    "data": [
+        {
+            "userId": "1",
+            "userName": "admin",
+            "realName": "小李",
+			"gender": "男",
+			"roleName": "管理员、教师",
+			"departName": "教务处",
+			"jobName": "教务处处长",
+			"phone": "13769855596",
+			"createTime": "2021-05-02 01:34:09" ,
+			"modifiedTime" : ""
+        },
+        {
+            "userId": "2",
+            "userName": "user1",
+            "realName": "小王",
+            "gender": "男",
+            "roleName": "教师",
+            "departName": "软件工程专业",
+            "jobName": "教研室主任",
+            "phone": "13769855597",
+            "createTime": "2021-05-02 01:34:09" ,
+			"modifiedTime" : ""
+        },
+        {
+            "userId": "3",
+            "userName": "user2",
+            "realName": "小清",
+            "gender": "女",
+            "roleName": "管理员",
+            "departName": "信息工程学院",
+            "jobName": "院长",
+            "phone": "13769855598",
+            "createTime": "2021-05-02 01:34:09" ,
+			"modifiedTime" : "2021-05-03 11:34:09"
+        }
+    ]
+}

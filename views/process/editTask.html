@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/layui/2.6.5/css/layui.min.css" media="all">
+	</head>
+	<body>
+		
+		<form class="layui-form" action="" onsubmit="return false" style="height: auto; margin-left: 20%;">
+							  
+			  <div class="layui-form-item">
+				 <label class="layui-form-label">任务1</label>
+			  </div>
+			  <div class="layui-form-item">
+				 <label class="layui-form-label">任务名称：</label>
+				  <div class="layui-input-inline">
+					  <input type="text" name="name" id="name" class="layui-input" required="true">
+				  </div>
+			  </div>
+			  <div class="layui-form-item">
+				 <label class="layui-form-label">负责人：</label>
+				  <div class="layui-input-inline">
+				        <select name="quiz1">
+				          <option value="">请选择职务</option>
+				          <option value="教务处处长">教务处处长</option>
+				          <option value="学院院长">学院院长</option>
+				          <option value="教研室主任">教研室主任</option>
+				        </select>
+				      </div>
+				  <div class="layui-input-inline">
+					<select name="quiz2">
+					  <option value="">请选择部门</option>
+					  <option value="教务处">教务处</option>
+					  <option value="信息工程学院">信息工程学院</option>
+					  <option value="通信工程专业">通信工程专业</option>
+					  <option value="软件工程专业">软件工程专业</option>
+					  <option value="机械工程学院">机械工程学院</option>
+					</select>
+				  </div>
+				  <div class="layui-input-inline">
+				        <select name="quiz3">
+				          <option value="">请选择姓名</option>
+				          <option value="小明">小明</option>
+				          <option value="小李">小李</option>
+				          <option value="小黑">小黑</option>
+				        </select>
+				      </div>
+					
+			  </div>
+			<div class="layui-form-item">
+			    <label class="layui-form-label">任务类型：</label>
+			    <div class="layui-input-block">
+			      <input type="radio" name="processType" value="0" title="执行">
+			      <input type="radio" name="processType" value="1" title="审批" checked>
+			    </div>
+			  </div>
+			 <div class="layui-form" id="last"></div>
+							  
+		    <div class="layui-form-item">
+			  <div class="layui-input-block">
+				  <button class="layui-btn" lay-submit lay-filter="taskSubmit">立即提交</button>
+				  <button class="layui-btn layui-btn-primary" id="add">添加任务</button>
+				  <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+			  </div>
+		  </div>
+		  
+		</form>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/layui/2.6.5/layui.js" charset="utf-8"></script>
+		<script>
+			var id = 1
+
+			$ = layui.$;
+			$("#add").click(function () {
+				id = id+1;
+				name = "任务" + id
+				mission_name = "name" + id
+				quiz1 = "quiz1" + id
+				quiz2 = "quiz2" + id
+				quiz3 = "quiz3" + id
+				processType = "processType" + id
+				var str =     `
+			  <div class="layui-form-item">
+				 <label class="layui-form-label">`+name+`</label>
+			  </div>
+			  <div class="layui-form-item">
+				 <label class="layui-form-label">任务名称：</label>
+				  <div class="layui-input-inline">
+					  <input type="text" name="name" id=` + mission_name +` class="layui-input" required="true">
+				  </div>
+			  </div>
+			  <div class="layui-form-item">
+				 <label class="layui-form-label">负责人：</label>
+				  <div class="layui-input-inline">
+				        <select name=` + quiz1 +` >
+				          <option value="">请选择职务</option>
+				          <option value="教务处处长">教务处处长</option>
+				          <option value="学院院长">学院院长</option>
+				          <option value="教研室主任">教研室主任</option>
+				        </select>
+				      </div>
+				      <div class="layui-input-inline">
+				        <select name=` + quiz2 +`>
+				          <option value="">请选择部门</option>
+				          <option value="教务处">教务处</option>
+				          <option value="信息工程学院">信息工程学院</option>
+				          <option value="通信工程专业">通信工程专业</option>
+				          <option value="软件工程专业">软件工程专业</option>
+				          <option value="机械工程学院">机械工程学院</option>
+				        </select>
+				      </div>
+				      <div class="layui-input-inline">
+				        <select name=` + quiz3 +`>
+				          <option value="">请选择姓名</option>
+				          <option value="小明">小明</option>
+				          <option value="小李">小李</option>
+				          <option value="小黑">小黑</option>
+				        </select>
+				      </div>
+					
+			  </div>
+			  
+			  <div class="layui-form-item">
+			      <label class="layui-form-label">任务类型：</label>
+			      <div class="layui-input-block">
+			        <input type="radio" name=` + processType +` value="0" title="执行">
+			        <input type="radio" name=` + processType +` value="1" title="审批" checked>
+			      </div>
+			    </div>
+			  `
+	 
+
+					$("#last").append(str);
+					layui.use('form', function() {
+						var form = layui.form;
+						form.render();
+				});
+
+				
+				
+			
+				});
+		</script>
+	</body>
+</html>
