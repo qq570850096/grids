@@ -19,4 +19,11 @@ func init() {
 	beego.Router("/user/Search", &controllers.UserConn{},"get:Search")
 
 	beego.Router("/role/roleList", &controllers.RoleCon{},"get:Get")
+
+	beego.Router("/mission", &controllers.MissCon{},"get:Mission")
+	beego.Router("/workPlace", &controllers.MissCon{},"get:WorkPlace")
+	beego.Router("/applyPlace", &controllers.MissCon{},"get:ApplyPlace")
+	beego.Router("/miss/workAssigned", &controllers.MissCon{},"get:WorkAssigned")
+	beego.Router("/miss/doMission", &controllers.MissCon{},"get:DoMission")
+	beego.Router("/miss/apply", &controllers.MissCon{},"post:Apply")
 }

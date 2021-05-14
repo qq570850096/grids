@@ -12,11 +12,11 @@ import (
 type Taskinstance struct {
 	Id         int    `orm:"column(taskId);auto" description:"娴佺▼瀹炰緥鐨勪换鍔d"`
 	TaskName   string `orm:"column(taskName);size(255);null" description:"浠诲姟鍚嶇О"`
-	JobId      int64  `orm:"column(jobId);null" description:"璐熻矗鑱屽姟Id"`
-	DepartId   int64  `orm:"column(departId);null" description:"璐熻矗閮ㄩ棬Id"`
-	UserId     int64  `orm:"column(userId);null" description:"璐熻矗浜篒d"`
+	JobId      int  `orm:"column(jobId);null" description:"璐熻矗鑱屽姟Id"`
+	DepartId   int  `orm:"column(departId);null" description:"璐熻矗閮ㄩ棬Id"`
+	UserId     int  `orm:"column(userId);null" description:"璐熻矗浜篒d"`
 	TaskType   string `orm:"column(taskType);size(10);null" description:"浠诲姟绫诲瀷锛堟墽琛屻�佸鎵癸級"`
-	InstanceId int64  `orm:"column(instanceId);null" description:"鎵�灞炴祦绋嬪疄渚婭d"`
+	InstanceId int  `orm:"column(instanceId);null" description:"鎵�灞炴祦绋嬪疄渚婭d"`
 	TaskSort   int    `orm:"column(taskSort);null" description:"浠诲姟椤哄簭"`
 	TaskStatus string `orm:"column(taskStatus);size(10);null" description:"浠诲姟鐘舵��"`
 }

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>查看流程</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+		<link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
+
+	</head>
+	<body>
+
+
+		<table class="layui-hide" id="processDetail" lay-filter="processDetail"></table>
+
+
+		<script src="/static/layui/layui.js" charset="utf-8"></script>
+		<script src="/static/jquery/jquery-3.5.1.min.js"></script>
+
+		<script>
+			layui.use(['table', 'form'], function() {
+				var table = layui.table;
+				var form = layui.form;
+
+				table.render({
+					elem: '#processDetail',
+					url: 'processDetailTestData.json',
+
+					// parseData: function(res) {
+					// 	return {
+					// 		"code": res.code, //解析接口状态
+					// 		"msg": res.msg, //解析提示文本
+					// 		"count": res.data.count, //解析数据长度
+					// 		"data": res.data.records //解析数据列表
+					// 	};
+					// },
+					cols: [
+						[{
+							type: 'checkbox'
+						}, {
+							field: 'taskSort',
+							title: '顺序',
+							sort: true
+						}, {
+							field: 'taskName',
+							title: '任务名称'
+						}, {
+							field: 'taskType',
+							title: '任务类型'
+						}, {
+							field: 'taskStatus',
+							title: '任务状态'
+						}, {
+							field: 'userName',
+							title: '负责人'
+						}]
+					],
+					id: 'myReload'
+					
+				});
+
+
+			});
+		</script>
+
+	</body>
+</html>

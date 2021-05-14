@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>部门管理</title>
+		<meta name="renderer" content="webkit">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+		<link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
+
+	</head>
+	<body>
+
+		<table class="layui-hide" id="doMission" lay-filter="doMission"></table>
+
+		<script type="text/html" id="barDemo">
+			<a class="layui-btn layui-btn-xs" lay-event="do">处理</a>
+		</script>
+
+
+		<script src="/static/layui/layui.js" charset="utf-8"></script>
+		<script src="/static/jquery/jquery-3.5.1.min.js"></script>
+
+		<script>
+			layui.use(['table', 'form'], function() {
+				var table = layui.table;
+				var form = layui.form;
+
+				table.render({
+					elem: '#doMission',
+					url: 'doMissionTestData.json',
+					// parseData: function(res) {
+					// 	return {
+					// 		"code": res.code, //解析接口状态
+					// 		"msg": res.msg, //解析提示文本
+					// 		"count": res.data.count, //解析数据长度
+					// 		"data": res.data.records //解析数据列表
+					// 	};
+					// },
+					cols: [
+						[{
+							field: 'taskName',
+							title: '任务名称',
+							sort: true
+						}, {
+							field: 'departName',
+							title: '部门名称'
+						}, {
+							title: '操作',
+							toolbar: '#barDemo',
+							fixed: 'right',
+							width: 160
+						}]
+					],
+					id: 'myReload',
+					page: true
+				});
+
+				//按条件查询
+				var $ = layui.$,
+					active = {
+						reload: function() {
+							var searchDepart = $('#searchDepart');
+
+							//执行重载
+							table.reload('myReload', {
+								page: {
+									curr: 1 //重新从第 1 页开始
+								},
+								where: {
+									key: {
+										title: searchDepart.val()
+									}
+								}
+							});
+						}
+					};
+
+				
+				//监听行工具事件
+				table.on('tool(doMission)', function(obj) {
+					var data = obj.data;
+					var layEvent = obj.event;
+					//console.log(obj)
+					if (layEvent === 'do') {
+						layer.confirm('是否确定办理？', function(index) {
+							layer.close(index);
+							var $ = layui.$;
+							$.ajax({
+								url: "/xx/xxx?id=" + obj.data.id,
+								async: false,
+								type: 'DELETE',
+								success: function(res) {
+									if (res.code == 0) { //成功
+										obj.del();
+										layer.alert("完成办理");
+									} else {
+										layer.alert("办理失败");
+										//layer.alert("res.msg");
+									}
+								},
+								error: function() {
+									layer.alert("办理失败");
+									//layer.alert("res.msg");
+								}
+							});
+
+						});
+					} 
+				});
+				
+			});
+		</script>
+
+	</body>
+</html>

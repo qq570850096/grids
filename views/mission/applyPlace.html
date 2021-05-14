@@ -3,39 +3,68 @@
 	<head>
 		<meta charset="utf-8">
 		<title></title>
-		  <link rel="stylesheet" href="../../static/layui/css/layui.css" media="all">
+		  <link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
 	</head>
 	<body>
-		<div class="layui-bg-gray" style="padding: 30px;">
+	{{range $key, $elem := .MAP}}
+		<div class="layui-bg-gray" style="padding-left: 30px;padding-top: 20px">
 		  <div class="layui-row layui-col-space15">
-		    <div class="layui-col-md12">
-		      <div class="layui-card">
-		        <div class="layui-card-header">请假申请</div>
-		        <div class="layui-card-body">
-		          <span style="margin-left: 5%;"><a href="http://www.baidu.com">院系教师请假申请模板</a></span>
-				  <span style="margin-left: 5%;"><a>正级领导请假申请模板</a></span>
-				  <span style="margin-left: 5%;"><a>教务处教员请假申请模板</a></span>
-		        </div>
-		      </div>
-		    </div>
-			<div class="layui-col-md12">
-			  <div class="layui-card">
-			    <div class="layui-card-header">调课申请</div>
-			    <div class="layui-card-body">
-			      <span style="margin-left: 5%;"><a>院系教师调课申请模板</a></span>
-			    </div>
-			  </div>
-			</div>
-			<div class="layui-col-md12">
-			  <div class="layui-card">
-			    <div class="layui-card-header">xx申请</div>
-			    <div class="layui-card-body">
-			      <span style="margin-left: 5%;"><a>流程名称</a></span>
-			    </div>
-			  </div>
-			</div>
+				<div class="layui-col-md12">
+				  <div class="layui-card">
+				    <div class="layui-card-header">{{$key}}</div>
+
+				    <div class="layui-card-body">
+						{{range $index, $element := $elem}}
+
+				      <span style="margin-left: 5%;"><a style="cursor: pointer;" class="apply" onclick="addpro({{$element.Id}},this)">{{$element.ProcessName}}</a></span>
+
+						{{end}}
+				    </div>
+
+				  </div>
+				</div>
+
+			
 		</div>
 	</div>
-	<script src="../../static/layui/layui.js" charset="utf-8"></script>
+	{{end}}
+	<script src="/static/layui/layui.js" charset="utf-8"></script>
+	<script src="/static/jquery/jquery-3.5.1.min.js"></script>
+	
+	<script>
+		var prid;
+		var proname;
+		function addpro(id,target){
+			prid = id;
+			proname = $(target).text()
+		}
+		$(".apply").click(function() {
+			layer.confirm('确定申请么？', function(index) {
+				layer.close(index);
+				var $ = layui.$;
+				var userId = parent.document.getElementById('userId').value;
+				$.ajax({
+					url: "/miss/apply",  //传入流程id:processId和当前登录用户id:userId.返回申请结果:成功/失败
+					async: false,
+					data: {"userId": userId, "prid": prid, "proname": proname},
+					type: 'POST',
+					success: function(res) {
+						if (res.code == 0) { //成功
+							layer.alert("申请成功");
+						} else {
+							layer.alert("申请失败");
+							//layer.alert("res.msg");
+						}
+					},
+					error: function() {
+						layer.alert("申请失败");
+						//layer.alert("res.msg");
+					}
+				});
+			
+			});
+			
+		});
+	</script>
 	</body>
 </html>

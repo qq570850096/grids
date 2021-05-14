@@ -13,8 +13,8 @@ import (
 type Processinstance struct {
 	Id           int       `orm:"column(instanceId);auto" description:"娴佺▼瀹炰緥Id"`
 	InstanceName string    `orm:"column(instanceName);size(255);null" description:"娴佺▼鍚嶇О"`
-	ProcessId    int64     `orm:"column(processId);null" description:"娴佺▼Id"`
-	UserId       int64     `orm:"column(userId);null" description:"鍙戣捣浜篒d"`
+	ProcessId    int     `orm:"column(processId);null" description:"娴佺▼Id"`
+	UserId       int     `orm:"column(userId);null" description:"鍙戣捣浜篒d"`
 	CreateTime   time.Time `orm:"column(createTime);type(datetime);null" description:"鍒涘缓鏃堕棿"`
 }
 
