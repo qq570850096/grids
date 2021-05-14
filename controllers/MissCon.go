@@ -79,7 +79,7 @@ func (c *MissCon) Apply() {
 		TaskType:   "审批",
 		InstanceId: int(insid),
 		TaskSort:   1,
-		TaskStatus: "待办理",
+		TaskStatus: changestring("审批"),
 	}
 	_,err = models.AddTaskinstance(&tins)
 	if err != nil {
@@ -90,4 +90,13 @@ func (c *MissCon) Apply() {
 	}
 	c.Data["json"] = ret
 	c.ServeJSON()
+}
+
+func changestring(str string) string{
+	if str == "执行" {
+		return "待办理"
+	} else if str == "审批" {
+		return "待审批"
+	}
+	return ""
 }
