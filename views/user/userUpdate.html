@@ -45,11 +45,9 @@
 				<div class="layui-input-block" style="width: 300px;">
 					<select id="departId" name="departId" required="true">
 						<option value=""></option>
-						<option value="100">教务处</option>
-						<option value="101">信息工程学院</option>
-						<option value="102">计算机科学与技术专业</option>
-						<option value="103">通信工程专业</option>
-						<option value="104">软件工程专业</option>
+						{{range $ind, $elem := .Depart}}
+							<option value="{{$elem.Id}}">{{$elem.DepartName}}</option>
+						{{end}}
 					</select>
 				</div>
 			</div>
@@ -59,10 +57,9 @@
 				<div class="layui-input-block" style="width: 300px;">
 					<select id="jobId" name="jobId" required="true">
 						<option value=""></option>
-						<option value="100">教务处处长</option>
-						<option value="101">院长</option>
-						<option value="102">教研室主任</option>
-						<option value="103">普通教员</option>
+						{{range $ind, $elem := .Jobs}}
+							<option value="{{$elem.Id}}">{{$elem.JobName}}</option>
+						{{end}}
 					</select>
 				</div>
 			</div>

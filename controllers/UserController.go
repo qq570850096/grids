@@ -21,29 +21,33 @@ func (c *UserConn) List() {
 
 func (c *UserConn) Update() {
 	if c.Ctx.Request.Method == "GET" {
+		departs := models.GetAllDepart()
+		jobs := models.GetAllJob()
+		c.Data["Depart"] = departs
+		c.Data["Jobs"] = jobs
 		c.TplName = "user/userUpdate.html"
 	} else {
 		rolel := models.GetAllRole()
-		id,_ := strconv.Atoi(c.GetString("userId"))
+		id, _ := strconv.Atoi(c.GetString("userId"))
 		models.DeleteUserRoleU(id)
-		for _,v := range rolel {
+		for _, v := range rolel {
 			ro := "role" + strconv.Itoa(v.Id)
 			if c.GetString(ro) != "" {
-				tmp:=models.UserRole{
+				tmp := models.UserRole{
 					UserId: id,
 					RoleId: v.Id,
 				}
 				models.AddUserRole(&tmp)
 			}
 		}
-		user,_ := models.GetUserById(id)
+		user, _ := models.GetUserById(id)
 		user.Gender = c.GetString("gender")
 		user.UserName = c.GetString("userName")
 		user.RealName = c.GetString("realName")
 		user.Phone = c.GetString("phone")
 		user.ModifiedTime = time.Now()
-		user.JobId,_ = strconv.Atoi(c.GetString("jobId"))
-		user.DepartId,_ = strconv.Atoi(c.GetString("departId"))
+		user.JobId, _ = strconv.Atoi(c.GetString("jobId"))
+		user.DepartId, _ = strconv.Atoi(c.GetString("departId"))
 		err := models.UpdateUserById(user)
 
 		if err != nil {
@@ -55,8 +59,12 @@ func (c *UserConn) Update() {
 	}
 }
 
-func(c *UserConn) Add(){
+func (c *UserConn) Add() {
 	if c.Ctx.Request.Method == "GET" {
+		departs := models.GetAllDepart()
+		jobs := models.GetAllJob()
+		c.Data["Depart"] = departs
+		c.Data["Jobs"] = jobs
 		c.TplName = "user/userAdd.html"
 	} else {
 		user := models.User{}
@@ -66,17 +74,17 @@ func(c *UserConn) Add(){
 		user.RealName = c.GetString("realName")
 		user.Phone = c.GetString("phone")
 		user.CreateTime = time.Now()
-		user.JobId,_ = strconv.Atoi(c.GetString("jobId"))
-		user.DepartId,_ = strconv.Atoi(c.GetString("departId"))
+		user.JobId, _ = strconv.Atoi(c.GetString("jobId"))
+		user.DepartId, _ = strconv.Atoi(c.GetString("departId"))
 		user.CreateTime = time.Now()
 
-		id,_ := models.AddUser(&user)
+		id, _ := models.AddUser(&user)
 		rolel := models.GetAllRole()
 		models.DeleteUserRoleU(int(id))
-		for _,v := range rolel {
+		for _, v := range rolel {
 			ro := "role" + strconv.Itoa(v.Id)
 			if c.GetString(ro) != "" {
-				tmp:=models.UserRole{
+				tmp := models.UserRole{
 					UserId: int(id),
 					RoleId: v.Id,
 				}
@@ -89,15 +97,15 @@ func(c *UserConn) Add(){
 }
 
 func (c *UserConn) ListInfo() {
-	if name := c.GetString("key[title]");name == "" {
-		if users,err := models.UserList(); err != nil{
+	if name := c.GetString("key[title]"); name == "" {
+		if users, err := models.UserList(); err != nil {
 			fmt.Println(err)
 		} else {
-			for i:=0;i < len(users);i++{
-				if i < len(users) -1 {
+			for i := 0; i < len(users); i++ {
+				if i < len(users)-1 {
 					if users[i].Id == users[i+1].Id {
 						users[i+1].RoleName = users[i].RoleName + "、" + users[i+1].RoleName
-						users = append(users[:i],users[i+1:]...)
+						users = append(users[:i], users[i+1:]...)
 						i--
 					}
 				}
@@ -111,7 +119,7 @@ func (c *UserConn) ListInfo() {
 		}
 	} else {
 		ret := make(map[string]interface{})
-		users,_ := models.SearchUser(name)
+		users, _ := models.SearchUser(name)
 		ret["code"] = 0
 		ret["count"] = len(users)
 		ret["msg"] = ""
@@ -122,8 +130,8 @@ func (c *UserConn) ListInfo() {
 	c.ServeJSON()
 }
 
-func (c *UserConn) Del(){
-	id,_ := strconv.Atoi(c.GetString("id"))
+func (c *UserConn) Del() {
+	id, _ := strconv.Atoi(c.GetString("id"))
 	if err := models.DeleteUser(id); err != nil {
 		models.DeleteUserRoleU(id)
 		fmt.Println(err)
@@ -134,6 +142,6 @@ func (c *UserConn) Del(){
 	c.ServeJSON()
 }
 
-func (c *UserConn) Search(){
+func (c *UserConn) Search() {
 
 }
