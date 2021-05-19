@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"fmt"
 	"grids/models"
 	"grids/utils"
 	"strconv"
@@ -86,7 +87,7 @@ func (c *MissCon) Apply() {
 		TaskType:   "审批",
 		InstanceId: int(insid),
 		TaskSort:   1,
-		TaskStatus: changestring("审批"),
+		TaskStatus: changestring("审批",1),
 	}
 	_,err = models.AddTaskinstance(&tins)
 	if err != nil {
@@ -169,17 +170,22 @@ func (c *MissCon) AddUser() {
 	dep,_ := strconv.Atoi(c.GetString("departName"))
 	job,_ := strconv.Atoi(c.GetString("jobName"))
 	uid,_ := strconv.Atoi(c.GetString("user"))
+
 	for i,v := range tmp_cpy {
+
 		if v.Id == task_id {
+
 			j,_ := models.GetJobById(job)
 			tmp_cpy[i].JobId = j.Id
 			tmp_cpy[i].JobName = j.JobName
 			d,_ := models.GetDepartById(dep)
 			tmp_cpy[i].DepartId = d.Id
 			tmp_cpy[i].DepartName = d.DepartName
-			u,_ := models.GetUserById(uid)
-			tmp_cpy[i].UserId = u.Id
-			tmp_cpy[i].UserName = u.UserName
+			if uid != 0 {
+				u,_ := models.GetUserById(uid)
+				tmp_cpy[i].UserId = u.Id
+				tmp_cpy[i].UserName = u.UserName
+			}
 		}
 	}
 	c.Data["json"] = 1
@@ -187,27 +193,192 @@ func (c *MissCon) AddUser() {
 }
 
 func (c *MissCon) Cancel() {
-	tmp_cpy = tmp_cpy[0:0]
-	tmp = tmp[0:0]
+	//tmp_cpy = tmp_cpy[0:0]
+	//tmp = tmp[0:0]
 	c.Data["json"] = 1
 	c.ServeJSON()
 }
 
 func (c *MissCon) Publish() {
 	for _,v := range tmp_cpy {
-		m := v.Task
-		models.UpdateTaskById(&m)
+		if v.DepartId == 0 {
+			goto RETURN
+		}
+		x,_ := models.GetProcessinstanceByProId(v.ProcessId)
+		if v.UserId == 0 && v.DepartId != 0 && v.JobId != 0 {
+			users,_ := models.GetUserByLevel(v.DepartId,v.JobId)
+			for _,t := range users {
+				tIns := models.Taskinstance{
+					Id:         0,
+					TaskName:   v.TaskName,
+					JobId:      v.JobId,
+					DepartId:   v.DepartId,
+					UserId:     t.Id,
+					TaskType:   v.TaskType,
+					InstanceId: x.Id,
+					TaskSort:   v.TaskSort,
+					TaskStatus: changestring(v.TaskType,v.TaskSort),
+				}
+				if _,err := models.AddTaskinstance(&tIns);err != nil {
+					c.Data["json"] = 1
+					fmt.Println(err)
+				} else {
+					c.Data["json"] = 0
+				}
+			}
+		} else {
+			tIns := models.Taskinstance{
+				Id:         0,
+				TaskName:   v.TaskName,
+				JobId:      v.JobId,
+				DepartId:   v.DepartId,
+				UserId:     v.UserId,
+				TaskType:   v.TaskType,
+				InstanceId: x.Id,
+				TaskSort:   v.TaskSort,
+				TaskStatus: changestring(v.TaskType,v.TaskSort),
+			}
+			if _,err := models.AddTaskinstance(&tIns);err != nil {
+				c.Data["json"] = 1
+				fmt.Println(err)
+			} else {
+				c.Data["json"] = 0
+			}
+		}
+
 	}
+	RETURN:
 	tmp = tmp_cpy
-	c.Data["json"] = 0
 	c.ServeJSON()
 }
 
-func changestring(str string) string{
+func (c *MissCon)GetDoMiss ()  {
+	uid,_ := strconv.Atoi(c.GetString("userId"))
+	prid,_ := strconv.Atoi(c.GetString("prId"))
+	name := c.GetString("name")
+	pi,_ := models.GetProcessinstanceByProId(prid)
+	tasks,_ := models.GetTaskinstanceByUidInsId(uid,pi.Id,name)
+	type ret struct {
+		Id int
+		TaskName string
+		DepartName string
+		TaskType string
+		InsId int
+	}
+	var retList []ret
+	for _,v := range tasks{
+		if( v.TaskStatus == "已办理" || v.TaskStatus == "已通过" ||
+			v.TaskStatus == "已驳回" || v.TaskStatus == "已取消" || v.TaskStatus == "未开启") {
+			continue
+		}
+		d,_ := models.GetDepartById(v.DepartId)
+		tmp := ret{
+			Id: v.Id,
+			TaskName:   v.TaskName,
+			DepartName: d.DepartName,
+			TaskType: v.TaskType,
+			InsId:pi.Id,
+		}
+		retList = append(retList, tmp)
+	}
+	retmap := make(map[string]interface{})
+	retmap["code"] = 0
+	retmap["data"] = retList
+	retmap["count"] = len(retList)
+	retmap["msg"] = "success"
+	c.Data["json"] = retmap
+	c.ServeJSON()
+}
+
+func(c *MissCon)Deal(){
+	id,_ := strconv.Atoi(c.GetString("id"))
+	uid,_ := strconv.Atoi(c.GetString("uid"))
+	tins,_ := models.GetTaskinstanceById(id)
+	if tins.TaskType == "执行" {
+		tins.TaskStatus = "已办理"
+	} else {
+		tins.TaskStatus = "已通过"
+	}
+	if err := models.UpdateTaskinstanceById(tins);err != nil {
+		fmt.Println(err)
+		c.Data["json"] = 0
+	}
+	tins.TaskSort++
+	v,_ := models.GetTaskinstanceBySort(uid,tins.InstanceId,tins.TaskSort)
+	if v.TaskType == "执行" {
+		v.TaskStatus = "待办理"
+	} else {
+		v.TaskStatus = "待审批"
+	}
+	if err := models.UpdateTaskinstanceById(&v);err != nil {
+		fmt.Println(err)
+		c.Data["json"] = 0
+	}
+	c.Data["json"] = 1
+	c.ServeJSON()
+}
+func(c *MissCon)Undeal(){
+	id,_ := strconv.Atoi(c.GetString("id"))
+	uid,_ := strconv.Atoi(c.GetString("uid"))
+	tins,_ := models.GetTaskinstanceById(id)
+	if tins.TaskType == "执行" {
+		tins.TaskStatus = "已取消"
+	} else {
+		tins.TaskStatus = "已驳回"
+	}
+	models.UpdateTaskinstanceById(tins)
+	tins.TaskSort--
+	v,_ := models.GetTaskinstanceBySort(uid,tins.InstanceId,tins.TaskSort)
+	if v.TaskType == "执行" {
+		v.TaskStatus = "待办理"
+	} else {
+		v.TaskStatus = "待审批"
+	}
+	if err := models.UpdateTaskinstanceById(&v);err != nil {
+		fmt.Println(err)
+		c.Data["json"] = 0
+	}
+	c.Data["json"] = 1
+	c.ServeJSON()
+}
+
+
+func (c *MissCon) Check() {
+	id,_ := strconv.Atoi(c.GetString("id"))
+	uid,_ := strconv.Atoi(c.GetString("uid"))
+	c.Data["json"] = check(id,uid)
+	c.ServeJSON()
+}
+
+func changestring(str string,sort int) string{
+	if sort != 1 {
+		return "未开启"
+	}
 	if str == "执行" {
 		return "待办理"
 	} else if str == "审批" {
 		return "待审批"
 	}
 	return ""
+}
+
+func check(id,uid int) string {
+	var msg string
+	t,_ := models.GetTaskinstanceById(id)
+	if t.TaskSort > 1 {
+		t.TaskSort -= 1
+	} else {
+		return ""
+	}
+	v,_ := models.GetTaskinstanceBySort(uid,t.InstanceId,t.TaskSort)
+	if v.TaskType == "执行" && v.TaskSort > 1 && (v.TaskStatus == "未开启" || v.TaskStatus == "已取消") {
+		msg = v.TaskName+"还未办理，请先办理"+ v.TaskName
+	} else if v.TaskType == "审批" && v.TaskStatus == "待审批" {
+		msg = v.TaskName+"还未审批，请先审批"+ v.TaskName
+	} else if v.TaskType == "审批" && v.TaskSort > 1 && (v.TaskStatus == "未开启" || v.TaskStatus == "已驳回") {
+		msg = v.TaskName+"还未审批，请先审批"+ v.TaskName
+	} else if v.TaskType == "执行" && v.TaskStatus == "待办理" {
+		msg = v.TaskName+"还未办理，请先办理"+ v.TaskName
+	}
+	return msg
 }

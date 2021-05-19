@@ -45,6 +45,15 @@ func GetProcessinstanceById(id int) (v *Processinstance, err error) {
 	return nil, err
 }
 
+func GetProcessinstanceByProId(id int) (v *Processinstance, err error) {
+	o := orm.NewOrm()
+	v = &Processinstance{ProcessId: id}
+	if err = o.Read(v,"processId"); err == nil {
+		return v, nil
+	}
+	return nil, err
+}
+
 // GetAllProcessinstance retrieves all Processinstance matches certain condition. Returns empty list if
 // no records exist
 func GetAllProcessinstance(query map[string]string, fields []string, sortby []string, order []string,

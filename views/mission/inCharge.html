@@ -6,14 +6,14 @@
 		<link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
 	</head>
 	<body>
-		
+
 		<form class="layui-form" action="" onsubmit="return false" style="height: auto; margin-left: 20%;" >
 		    <div class="layui-form-item">
 		        <div class="layui-input-inline">
 		            <input type="hidden" name="taskId" id="taskId" class="layui-input">
 		        </div>
 		    </div>
-			
+
 			<div class="layui-form-item" >
 			    <label class="layui-form-label">负责职务：</label>
 			    <div class="layui-input-block" style="width: 300px;">
@@ -25,7 +25,7 @@
 			      </select>
 			    </div>
 			  </div>
-				
+
 				<div class="layui-form-item">
 				    <label class="layui-form-label">负责部门：</label>
 				    <div class="layui-input-block" style="width: 300px;">
@@ -37,11 +37,11 @@
 				      </select>
 				    </div>
 				  </div>
-				  
+
 				  <div class="layui-form-item" >
 				      <label class="layui-form-label">负责人：</label>
 				      <div class="layui-input-block" style="width: 300px;">
-				        <select name="user" id="user" required="true">
+				        <select name="user" id="user">
 
 						{{if .IsEmpty}}
 							<option value="">请先选择部门与职位</option>
@@ -50,7 +50,7 @@
 				        </select>
 				      </div>
 				    </div>
-							  
+
 		    <div class="layui-form-item">
 			  <div class="layui-input-block">
 				  <button class="layui-btn" lay-submit lay-filter="submit">确定</button>
@@ -78,10 +78,11 @@
                     success: function (data) {
                         $("#user").empty();
 					    if (data != null){
+							$('#user').append('<option value="" >' +"若此处不选择则将添加该部门所有用户"+ '</option>')
                             for (var i = 0; i < data.length; i++) {
                                 $('#user').append('<option value="' + data[i].Id + '" >' + data[i].UserName + '</option>')
                             }
-                            $('#user').val(data[0].Id);
+                            $('#user').val();
                         }
 
                         form.render();
@@ -96,8 +97,8 @@
                     type:'post',
                     success:function(data){
                         layer.msg("success")
-                        setTimeout(2000)
-                        layer.close()
+                        setTimeout(200)
+                        layer.closeAll()
                     }
                 })
             });

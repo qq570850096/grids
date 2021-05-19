@@ -48,6 +48,29 @@ func GetTaskinstanceById(id int) (v *Taskinstance, err error) {
 	return nil, err
 }
 
+func GetTaskinstanceByUidInsId(uid,insid int,name string) (v []Taskinstance, err error) {
+	o := orm.NewOrm()
+	if _,err = o.QueryTable("taskinstance").
+		Filter("userId",uid).Filter("instanceId",insid).
+		Filter("taskName",name).All(&v); err != nil {
+			fmt.Println(err)
+			return nil,err
+	}
+	return
+}
+
+func GetTaskinstanceBySort(uid,ins,sort int) (v Taskinstance, err error) {
+	o := orm.NewOrm()
+	if err = o.QueryTable("taskinstance").
+		Filter("userId",uid).
+		Filter("instanceId",ins).
+		Filter("taskSort",sort).One(&v); err != nil {
+		fmt.Println(err)
+		return
+	}
+	return
+}
+
 // GetAllTaskinstance retrieves all Taskinstance matches certain condition. Returns empty list if
 // no records exist
 func GetAllTaskinstance(query map[string]string, fields []string, sortby []string, order []string,

@@ -32,4 +32,8 @@ func init() {
 	beego.Router("/miss/addUser", &controllers.MissCon{},"post:AddUser")
 	beego.Router("/miss/cancel", &controllers.MissCon{},"get:Cancel")
 	beego.Router("/miss/publish", &controllers.MissCon{},"get:Publish")
+    beego.Router("/miss/getDoMiss",&controllers.MissCon{},"get:GetDoMiss")
+	beego.Router("/miss/check",&controllers.MissCon{},"get:Check")
+	beego.Router("/miss/deal",&controllers.MissCon{},"post:Deal")
+	beego.Router("/miss/undeal",&controllers.MissCon{},"post:Undeal")
 }
