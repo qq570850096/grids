@@ -64,7 +64,7 @@
 					<select id="jobId" name="jobId" required="true">
 						<option value=""></option>
 						{{range $ind, $elem := .Jobs}}
-							<option value="{{$elem.Id}}">{{$elem.DepartName}}</option>
+							<option value="{{$elem.Id}}">{{$elem.JobName}}</option>
 						{{end}}
 					</select>
 				</div>

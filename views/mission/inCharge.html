@@ -17,12 +17,11 @@
 			<div class="layui-form-item" >
 			    <label class="layui-form-label">负责职务：</label>
 			    <div class="layui-input-block" style="width: 300px;">
-			      <select name="jobName" required="true">
+			      <select name="jobName" id="jobName" required="true" lay-filter="projectfilter">
 			        <option value=""></option>
-			        <option value="0">教务处处长</option>
-			        <option value="1" selected="">院长</option>
-			        <option value="2">教研室主任</option>
-			        <option value="3">普通教员</option>
+					  {{range $ind, $elem := .Jobs}}
+						  <option value="{{$elem.Id}}">{{$elem.JobName}}</option>
+					  {{end}}
 			      </select>
 			    </div>
 			  </div>
@@ -30,13 +29,11 @@
 				<div class="layui-form-item">
 				    <label class="layui-form-label">负责部门：</label>
 				    <div class="layui-input-block" style="width: 300px;">
-				      <select name="departName" required="true">
+				      <select name="departName" id="departName" required="true" lay-filter="projectfilter">
 				        <option value=""></option>
-				        <option value="0">教务处</option>
-				        <option value="1" selected="">信息工程学院</option>
-				        <option value="2">计算机科学与技术专业</option>
-				        <option value="3">通信工程专业</option>
-				        <option value="4">软件工程专业</option>
+						  {{range $ind, $elem := .Depart}}
+							  <option value="{{$elem.Id}}">{{$elem.DepartName}}</option>
+						  {{end}}
 				      </select>
 				    </div>
 				  </div>
@@ -44,12 +41,12 @@
 				  <div class="layui-form-item" >
 				      <label class="layui-form-label">负责人：</label>
 				      <div class="layui-input-block" style="width: 300px;">
-				        <select name="jobName" required="true">
-				          <option value=""></option>
-				          <option value="0">小林</option>
-				          <option value="1" selected="">小清</option>
-				          <option value="2">小明</option>
-				          <option value="3">小红</option>
+				        <select name="user" id="user" required="true">
+
+						{{if .IsEmpty}}
+							<option value="">请先选择部门与职位</option>
+						{{end}}
+
 				        </select>
 				      </div>
 				    </div>
@@ -62,5 +59,50 @@
 		  </div>
 		</form>
 		<script src="/static/layui/layui.js" charset="utf-8"></script>
+	<script>
+		layui.use(['element','form'], function(){
+			var element = layui.element;
+			var form = layui.form;
+			var $ = layui.$;
+
+			form.on('select(projectfilter)',function(data){
+				var dep = $("#departName").val();//获取选中的值;
+				var job = $("#jobName").val();
+				console.log(dep);
+				console.log(job);
+				$.ajax({
+					url:"/miss/getInCharge",
+					data:{departName:dep,jobName:job},
+					type: "GET",
+					dataType:"json",
+                    success: function (data) {
+                        $("#user").empty();
+					    if (data != null){
+                            for (var i = 0; i < data.length; i++) {
+                                $('#user').append('<option value="' + data[i].Id + '" >' + data[i].UserName + '</option>')
+                            }
+                            $('#user').val(data[0].Id);
+                        }
+
+                        form.render();
+                    }
+				})
+			});
+            form.on('submit(submit)', function(data){
+                $.ajax({
+                    url:'/miss/addUser',
+                    data: data.field,
+                    dataType:'json',
+                    type:'post',
+                    success:function(data){
+                        layer.msg("success")
+                        setTimeout(2000)
+                        layer.close()
+                    }
+                })
+            });
+		})
+
+	</script>
 	</body>
 </html>

@@ -17,6 +17,11 @@ type Process struct {
 	ModifiedUserId int64     `orm:"column(modifiedUserId);null" description:"淇敼鑰匢d"`
 }
 
+type ProcessTask struct {
+	P Process
+	Tasks			[]Task
+}
+
 func (t *Process) TableName() string {
 	return "process"
 }
@@ -52,6 +57,22 @@ func GetAllProcessApply() (m []Process){
 	return m
 }
 
+func GetAllProcessCheck() (m []ProcessTask){
+	plist := make([]Process,0)
+	o := orm.NewOrm()
+	o.QueryTable("process").Filter("processType","指派").All(&plist)
+
+	for _,v := range plist{
+		tmp := ProcessTask{
+			P:     v,
+			Tasks: []Task{},
+		}
+		tmp.Tasks = GetAllTaskByProcessT(v.Id)
+		m = append(m,tmp)
+	}
+
+	return m
+}
 // UpdateProcess updates Process by Id and returns error if
 // the record to be updated doesn't exist
 func UpdateProcessById(m *Process) (err error) {

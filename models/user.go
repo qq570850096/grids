@@ -64,6 +64,15 @@ func GetUserById(id int) (v *User, err error) {
 	return nil, err
 }
 
+func GetUserByLevel(dep,job int) (v []User, err error) {
+	o := orm.NewOrm()
+	_,err = o.QueryTable("user").Filter("departId",dep).Filter("jobId",job).All(&v)
+	if err != nil {
+		return nil, err
+	}
+	return
+}
+
 // GetAllUser retrieves all User matches certain condition. Returns empty list if
 // no records exist
 func GetAllUser() (user []User, err error) {
