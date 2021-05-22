@@ -11,8 +11,8 @@ import (
 
 type ProcessJob struct {
 	Id        int   `orm:"column(id);auto"`
-	ProcessId int64 `orm:"column(processId);null" description:"娴佺▼Id"`
-	JobId     int64 `orm:"column(jobId);null" description:"鍚敤鑱屽姟Id"`
+	ProcessId int `orm:"column(processId);null" description:"娴佺▼Id"`
+	JobId     int `orm:"column(jobId);null" description:"鍚敤鑱屽姟Id"`
 }
 
 func (t *ProcessJob) TableName() string {
@@ -147,5 +147,35 @@ func DeleteProcessJob(id int) (err error) {
 			fmt.Println("Number of records deleted in database:", num)
 		}
 	}
+	return
+}
+
+func CheckPidUid(i,j int) bool {
+	o := orm.NewOrm()
+	return o.QueryTable("process_job").
+		Filter("processId",i).Filter("jobId",j).Exist()
+}
+
+func GetPj(processid int)(joblist []Job){
+	o := orm.NewOrm()
+	process := []ProcessJob{}
+	o.QueryTable("process_job").
+		Filter("processId",processid).All(&process)
+
+	// reverse query
+	for _,v := range process{
+		tmp := Job{}
+		o.QueryTable("job").
+			Filter("jobId",v.JobId).One(&tmp)
+		joblist = append(joblist,tmp)
+	}
+	return joblist
+}
+
+func DeleteProcessJobP(id int) (err error) {
+	o := orm.NewOrm()
+	v := ProcessJob{ProcessId: id}
+	// ascertain id exists in the database
+	_,err = o.Delete(&v,"processId")
 	return
 }

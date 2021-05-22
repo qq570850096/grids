@@ -3,59 +3,58 @@
 	<head>
 		<meta charset="utf-8">
 		<title></title>
-		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/layui/2.6.5/css/layui.min.css" media="all">
+		<link rel="stylesheet" href="../../static/layui/css/layui.css" media="all">
 	</head>
 	<body>
 		
 		<form class="layui-form" action="" onsubmit="return false" style="height: auto; margin-left: 20%;">
-							  
+			<input type="hidden" name="procId" id="procId" class="layui-input">
+			{{ if .IsEmpty }}
 			  <div class="layui-form-item">
 				 <label class="layui-form-label">任务1</label>
 			  </div>
 			  <div class="layui-form-item">
 				 <label class="layui-form-label">任务名称：</label>
 				  <div class="layui-input-inline">
-					  <input type="text" name="name" id="name" class="layui-input" required="true">
+					  <input type="text" name="taskName1" id="taskName1" class="layui-input" required="true">
 				  </div>
 			  </div>
 			  <div class="layui-form-item">
-				 <label class="layui-form-label">负责人：</label>
+				 <label class="layui-form-label">负责</label>
 				  <div class="layui-input-inline">
-				        <select name="quiz1">
-				          <option value="">请选择职务</option>
-				          <option value="教务处处长">教务处处长</option>
-				          <option value="学院院长">学院院长</option>
-				          <option value="教研室主任">教研室主任</option>
-				        </select>
+					  <select name="jobId1" id="jobId1" lay-filter="projectfilter">
+						  <option value="">请选择职务</option>
+						  {{range $ind, $elem := .Jobs}}
+						  <option value="{{$elem.Id}}">{{$elem.JobName}}</option>
+						  {{end}}
+					  </select>
 				      </div>
 				  <div class="layui-input-inline">
-					<select name="quiz2">
-					  <option value="">请选择部门</option>
-					  <option value="教务处">教务处</option>
-					  <option value="信息工程学院">信息工程学院</option>
-					  <option value="通信工程专业">通信工程专业</option>
-					  <option value="软件工程专业">软件工程专业</option>
-					  <option value="机械工程学院">机械工程学院</option>
-					</select>
+					  <select id="departId1" name="departId1" lay-filter="projectfilter">
+						  <option value="">请选择部门</option>
+						  {{range $ind, $elem := .Departs}}
+						  <option value="{{$elem.Id}}">{{$elem.DepartName}}</option>
+						  {{end}}
+					  </select>
 				  </div>
 				  <div class="layui-input-inline">
-				        <select name="quiz3">
-				          <option value="">请选择姓名</option>
-				          <option value="小明">小明</option>
-				          <option value="小李">小李</option>
-				          <option value="小黑">小黑</option>
-				        </select>
+					  <select id="userId1" name="userId1" required="true">
+						  <option value="">请选择教师</option>
+						  {{range $ind, $elem := .Users}}
+						  <option value="{{$elem.Id}}">{{$elem.RealName}}</option>
+						  {{end}}
+					  </select>
 				      </div>
 					
 			  </div>
 			<div class="layui-form-item">
 			    <label class="layui-form-label">任务类型：</label>
 			    <div class="layui-input-block">
-			      <input type="radio" name="processType" value="0" title="执行">
-			      <input type="radio" name="processType" value="1" title="审批" checked>
+			      <input type="radio" name="taskType" value="执行" title="执行">
+			      <input type="radio" name="taskType" value="审批" title="审批" checked>
 			    </div>
 			  </div>
-			 <div class="layui-form" id="last"></div>
+			 <div class="layui-form" id="last1"></div>
 							  
 		    <div class="layui-form-item">
 			  <div class="layui-input-block">
@@ -64,21 +63,101 @@
 				  <button type="reset" class="layui-btn layui-btn-primary">重置</button>
 			  </div>
 		  </div>
-		  
+		  {{else}}
+			{{range $i,$v := .Tasks}}
+			<div class="layui-form-item">
+				<label class="layui-form-label">任务{{$v.TaskSort}}</label>
+			</div>
+
+			<input type="hidden" name="taskId{{$v.TaskSort}}" id="taskId{{$v.TaskSort}}" class="layui-input" required="true" value="{{$v.Id}}">
+			<div class="layui-form-item">
+				<label class="layui-form-label">任务名称：</label>
+				<div class="layui-input-inline">
+					<input type="text" name="taskName{{$v.TaskSort}}" id="taskName{{$v.TaskSort}}" class="layui-input" required="true" value="{{$v.TaskName}}">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">负责</label>
+				<div class="layui-input-inline">
+					<select name="jobId{{$v.TaskSort}}" id="jobId{{$v.TaskSort}}" lay-filter="projectfilter">
+						<option value="">请选择职务</option>
+						{{range $ind, $elem := $.Jobs}}
+							{{if eq $v.JobId $elem.Id}}
+								<option value="{{$elem.Id}}" selected>{{$elem.JobName}}</option>
+							{{else}}
+								<option value="{{$elem.Id}}">{{$elem.JobName}}</option>
+							{{end}}
+						{{end}}
+					</select>
+				</div>
+				<div class="layui-input-inline">
+					<select id="departId{{$v.TaskSort}}" name="departId{{$v.TaskSort}}" lay-filter="projectfilter">
+						<option value="">请选择部门</option>
+						{{range $ind, $elem := $.Departs}}
+							{{if eq $elem.Id  $v.DepartId}}
+								<option value="{{$elem.Id}}" selected>{{$elem.DepartName}}</option>
+							{{else}}
+								<option value="{{$elem.Id}}">{{$elem.DepartName}}</option>
+							{{end}}
+
+						{{end}}
+					</select>
+				</div>
+				<div class="layui-input-inline">
+					<select id="userId{{$v.TaskSort}}" name="userId{{$v.TaskSort}}">
+						<option value="">请选择教师</option>
+						{{range $ind, $elem := $.Users}}
+							{{if eq $elem.Id  $v.UserId}}
+								<option value="{{$elem.Id}}">{{$elem.RealName}}</option>
+								{{else}}
+								<option value="{{$elem.Id}}" selected>{{$elem.RealName}}</option>
+								{{end}}
+						{{end}}
+					</select>
+				</div>
+
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">任务类型：</label>
+				<div class="layui-input-block">
+					{{if eq $v.TaskType  "执行"}}
+						<input type="radio" name="taskType{{$v.TaskSort}}" value="执行" title="执行" checked>
+						<input type="radio" name="taskType{{$v.TaskSort}}" value="审批" title="审批">
+					{{else}}
+						<input type="radio" name="taskType{{$v.TaskSort}}" value="执行" title="执行" >
+						<input type="radio" name="taskType{{$v.TaskSort}}" value="审批" title="审批" checked>
+					{{end}}
+				</div>
+			</div>
+			<div class="layui-form" id="last{{$v.TaskSort}}"></div>
+			{{end}}
+			<div class="layui-form-item">
+				<div class="layui-input-block">
+					<button class="layui-btn" lay-submit lay-filter="taskSubmit">立即提交</button>
+					<button class="layui-btn layui-btn-primary" id="add">添加任务</button>
+					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				</div>
+			</div>
+
+		  {{end}}
 		</form>
-		<script src="https://cdnjs.cloudflare.com/ajax/libs/layui/2.6.5/layui.js" charset="utf-8"></script>
+		<script src="../../static/layui/layui.js" charset="utf-8"></script>
+		<script src="/static/js/cookie.js" charset="utf-8"></script>
 		<script>
 			var id = 1
-
+			if (getCookie("count") != 0) {
+				id = parseInt(getCookie("count"))
+			}
 			$ = layui.$;
 			$("#add").click(function () {
 				id = id+1;
+				console.log(id)
 				name = "任务" + id
-				mission_name = "name" + id
-				quiz1 = "quiz1" + id
-				quiz2 = "quiz2" + id
-				quiz3 = "quiz3" + id
-				processType = "processType" + id
+				taskName = "taskName" + id
+				jobId = "jobId" + id
+				quiz2 = "departId" + id
+				quiz3 = "userId" + id
+				taskType = "taskType" + id
 				var str =     `
 			  <div class="layui-form-item">
 				 <label class="layui-form-label">`+name+`</label>
@@ -86,35 +165,24 @@
 			  <div class="layui-form-item">
 				 <label class="layui-form-label">任务名称：</label>
 				  <div class="layui-input-inline">
-					  <input type="text" name="name" id=` + mission_name +` class="layui-input" required="true">
+					  <input type="text" name= ` + taskName +` id=` + taskName +` class="layui-input" required="true">
 				  </div>
 			  </div>
 			  <div class="layui-form-item">
 				 <label class="layui-form-label">负责人：</label>
 				  <div class="layui-input-inline">
-				        <select name=` + quiz1 +` >
+				        <select name=` + jobId +` id=` + jobId +` lay-filter="projectfilter">
 				          <option value="">请选择职务</option>
-				          <option value="教务处处长">教务处处长</option>
-				          <option value="学院院长">学院院长</option>
-				          <option value="教研室主任">教研室主任</option>
 				        </select>
 				      </div>
 				      <div class="layui-input-inline">
-				        <select name=` + quiz2 +`>
+				        <select name=` + quiz2 +` id=` + quiz2 +` lay-filter="projectfilter">
 				          <option value="">请选择部门</option>
-				          <option value="教务处">教务处</option>
-				          <option value="信息工程学院">信息工程学院</option>
-				          <option value="通信工程专业">通信工程专业</option>
-				          <option value="软件工程专业">软件工程专业</option>
-				          <option value="机械工程学院">机械工程学院</option>
 				        </select>
 				      </div>
 				      <div class="layui-input-inline">
-				        <select name=` + quiz3 +`>
+				        <select name=` + quiz3 +` id=` + quiz3 +`>
 				          <option value="">请选择姓名</option>
-				          <option value="小明">小明</option>
-				          <option value="小李">小李</option>
-				          <option value="小黑">小黑</option>
 				        </select>
 				      </div>
 					
@@ -123,23 +191,100 @@
 			  <div class="layui-form-item">
 			      <label class="layui-form-label">任务类型：</label>
 			      <div class="layui-input-block">
-			        <input type="radio" name=` + processType +` value="0" title="执行">
-			        <input type="radio" name=` + processType +` value="1" title="审批" checked>
+			        <input type="radio" name=` + taskType +` value="执行" title="执行">
+			        <input type="radio" name=` + taskType +` value="审批" title="审批" checked>
 			      </div>
 			    </div>
+					<div class="layui-form" id="last` + id +`"></div>
 			  `
-	 
 
-					$("#last").append(str);
+					last = "#last"+(id-1)
+					console.log(last);
+
+					$(last).append(str);
 					layui.use('form', function() {
 						var form = layui.form;
+						var $ = layui.$;
+						$.ajax({
+							url: '/test',
+							dataType: 'json',
+							type: 'get',
+							success: function (objs) {
+								var labelTypes = objs.jobs;
+								console.log(labelTypes)
+								$.each(labelTypes, function (index, item) {
+									jobid = "#jobId" + id
+									console.log(jobid)
+									$(jobid).append('<option value="' + item.Id + '" >' + item.JobName + '</option>');
+								});
+								form.render()
+								var labelTypes = objs.departs;
+								console.log(labelTypes)
+								$.each(labelTypes, function (index, item) {
+									depId = "#departId" + id
+									$(depId).append('<option value="' + item.Id + '" >' + item.DepartName + '</option>');
+								});
+								form.render();
+							}
+						})
 						form.render();
-				});
 
-				
-				
-			
 				});
+			
+			});
+			layui.use(['element','form'], function(){
+				var form = layui.form;
+				var $ = layui.$;
+				form.on('select(projectfilter)',function(data){
+					var str = data.elem.id
+					var num = str.replace(/[^0-9]/ig,"");
+					var jid = "#jobId" + num
+					var did = "#departId" + num
+					var job = $(jid).val();//获取选中的值;
+					var dep = $(did).val();
+					$.ajax({
+						url:"/test/users",
+						data: {jobId:job,departId:dep},
+						type: "GET",
+						dataType:"json",
+						success: function (data) {
+							var user = "#userId" + num
+							$(user).empty();
+							console.log(data)
+							if (data != null){
+								for (var i = 0; i < data.length; i++) {
+									$(user).append('<option value="' + data[i].Id + '" >' + data[i].UserName + '</option>')
+								}
+								$(user).val();
+							} else {
+								$(user).append('<option value="" >' +"符合条件的用户不存在"+ '</option>')
+							}
+
+							form.render();
+						}
+					})
+				});
+				form.on('submit(taskSubmit)', function(data){
+					$.ajax({
+						url:'/process/taskInfo',
+						data: data.field,
+						dataType:'json',
+						type:'post',
+						success:function(data){
+							if (data == 1){
+								layer.msg("提交成功")
+
+							} else {
+								layer.msg("提交失败")
+							}
+							setTimeout(function (){
+								var index=parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+								parent.layer.close(index);
+							},1000);
+						}
+					})
+				});
+			})
 		</script>
 	</body>
 </html>

@@ -13,7 +13,7 @@
         },
         {
             "processId": "2",
-            "processName": "调课工作",
+            "processName": "院系教师调课申请模板",
             "jobName": "普通教师",
             "processType": "申请",
 			"createTime": "2021-05-02 01:34:09" ,
@@ -23,6 +23,14 @@
             "processId": "3",
             "processName": "正院级领导请假模板",
             "jobName": "院长",
+            "processType": "申请",
+			"createTime": "2021-05-02 01:34:09" ,
+			"modifiedTime" : ""
+        },
+        {
+            "processId": "4",
+            "processName": "普通教师请假模板",
+            "jobName": "普通教师",
             "processType": "申请",
 			"createTime": "2021-05-02 01:34:09" ,
 			"modifiedTime" : ""

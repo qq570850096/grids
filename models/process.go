@@ -22,6 +22,16 @@ type ProcessTask struct {
 	Tasks			[]Task
 }
 
+type ProcessJ struct {
+	Id             int       `orm:"column(processId);auto" description:"娴佺▼Id"`
+	ProcessName    string    `orm:"column(processName);size(255);null" description:"娴佺▼鍚嶇О"`
+	ProcessType    string    `orm:"column(processType);size(10);null" description:"娴佺▼绫诲瀷锛堟寚娲俱�佺敵璇凤級"`
+	JobName        string    `orm:"column(jobName);size(50);null" description:"鑱屽姟鍚嶇О"`
+	CreateTime     time.Time `orm:"column(createTime);type(datetime);null" description:"鍒涘缓鏃堕棿"`
+	ModifiedTime   time.Time `orm:"column(modifiedTime);type(datetime);null" description:"淇敼鏃堕棿"`
+}
+
+
 func (t *Process) TableName() string {
 	return "process"
 }
@@ -54,6 +64,12 @@ func GetProcessById(id int) (v *Process, err error) {
 func GetAllProcessApply() (m []Process){
 	o := orm.NewOrm()
 	o.QueryTable("process").Filter("processType","申请").All(&m)
+	return m
+}
+
+func GetAllProcess() (m []Process){
+	o := orm.NewOrm()
+	o.QueryTable("process").All(&m)
 	return m
 }
 
@@ -102,3 +118,28 @@ func DeleteProcess(id int) (err error) {
 	}
 	return
 }
+
+func ProcessList() (processlist []ProcessJ, err error) {
+	o := orm.NewOrm()
+	if _,err = o.Raw("SELECT p.*,j.jobName " +
+		"FROM process p, process_job pj, job j " +
+		"WHERE p.processId = pj.processId AND j.jobId = pj.jobId").QueryRows(&processlist); err != nil {
+		return nil ,err
+	}
+	return processlist,err
+}
+
+func SearchProcess(name string) (processlist []ProcessJ,err error) {
+	o := orm.NewOrm()
+	name1 := "%" + name + "%"
+	name2 := "%" + name + "%"
+	if _,err = o.Raw("SELECT p.*,j.jobName " +
+		"FROM process p, process_job pj, job j " +
+		"WHERE (p.processId = pj.processId AND j.jobId = pj.jobId AND j.jobName LIKE ?) OR "+
+		"(p.processId = pj.processId AND j.jobId = pj.jobId AND p.processType LIKE ?)", name1, name2).QueryRows(&processlist); err != nil {
+		return nil, err
+		fmt.Println(err)
+	}
+	return processlist,nil
+}
+

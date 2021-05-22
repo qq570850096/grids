@@ -27,6 +27,31 @@ type ret struct {
 func (c *MissCon) Mission(){
 	c.TplName = "mission/myMission.html"
 }
+
+func (c *MissCon) TestJobDepart() {
+	jobs := models.GetAllJob()
+	departs := models.GetAllDepart()
+	ret := make(map[string]interface{})
+	ret["jobs"] = jobs
+	ret["departs"] = departs
+	c.Data["json"] = ret
+	c.ServeJSON()
+}
+
+func (c *MissCon) TestJobDepartUser() {
+	dep,_ := strconv.Atoi(c.GetString("departId"))
+	job,_ := strconv.Atoi(c.GetString("jobId"))
+	if dep != 0 && job != 0 {
+		users,_ := models.GetUserByLevel(dep,job)
+		if len(users) > 0 {
+			c.Data["json"] = users
+		}
+	} else {
+		c.Data["json"] = nil
+	}
+	c.ServeJSON()
+}
+
 func (c *MissCon) WorkPlace(){
 	map1 := make(map[string][]string)
 
@@ -268,7 +293,8 @@ func (c *MissCon)GetDoMiss ()  {
 	var retList []ret
 	for _,v := range tasks{
 		if( v.TaskStatus == "已办理" || v.TaskStatus == "已通过" ||
-			v.TaskStatus == "已驳回" || v.TaskStatus == "已取消" || v.TaskStatus == "未开启") {
+			v.TaskStatus == "已驳回" || v.TaskStatus == "已取消" ||
+			v.TaskStatus == "未开启") {
 			continue
 		}
 		d,_ := models.GetDepartById(v.DepartId)

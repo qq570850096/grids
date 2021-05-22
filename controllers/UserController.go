@@ -142,6 +142,3 @@ func (c *UserConn) Del() {
 	c.ServeJSON()
 }
 
-func (c *UserConn) Search() {
-
-}
