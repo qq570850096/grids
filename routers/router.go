@@ -18,6 +18,7 @@ func init() {
 	beego.Router("/user/Del", &controllers.UserConn{},"post:Del")
 
 	beego.Router("/role/roleList", &controllers.RoleCon{},"get:Get")
+	beego.Router("/role/roleListInfo", &controllers.RoleCon{},"get:ListInfo")
 
 	beego.Router("/mission", &controllers.MissCon{},"get:Mission")
 	beego.Router("/workPlace", &controllers.MissCon{},"get:WorkPlace")
@@ -43,4 +44,9 @@ func init() {
 	beego.Router("/process/task",&controllers.ProcessConn{},"get:Task")
 	beego.Router("/process/taskInfo",&controllers.ProcessConn{},"post:TaskInfo")
 	beego.Router("/process/update",&controllers.ProcessConn{},"*:Update")
+
+	beego.Router("/role/Add",&controllers.RoleCon{},"*:GetAdd")
+	beego.Router("/role/Update",&controllers.RoleCon{},"*:UpInfo")
+	beego.Router("/role/listResource",&controllers.RoleCon{},"get:GetMenu")
+	beego.Router("/role/list",&controllers.RoleCon{},"get:GetRoleList")
 }

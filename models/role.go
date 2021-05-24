@@ -83,3 +83,15 @@ func DeleteRole(id int) (err error) {
 	}
 	return
 }
+
+func SearchRole(name string) (roleList []Role,err error) {
+	o := orm.NewOrm()
+	name = "%" + name + "%"
+	if _,err = o.Raw("SELECT * " +
+		"FROM `role` " +
+		"WHERE roleName LIKE ? ", name).QueryRows(&roleList); err != nil {
+		return nil, err
+		fmt.Println(err)
+	}
+	return roleList,nil
+}

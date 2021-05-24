@@ -42,13 +42,13 @@ func GetUserRoleById(id int) (v *UserRole, err error) {
 	return nil, err
 }
 
-func GetUserRoleByUId(userid int) (v *UserRole, err error) {
+func GetUserRoleByUId(userid int) (v []UserRole, err error) {
 	o := orm.NewOrm()
-	v = &UserRole{UserId: userid}
-	if err = o.Read(v,"userId"); err == nil {
-		return v, nil
+	if _,err = o.QueryTable("user_role").
+		Filter("userId",userid).All(&v);err != nil {
+		return nil, err
 	}
-	return nil, err
+	return
 }
 
 // GetAllUserRole retrieves all UserRole matches certain condition. Returns empty list if

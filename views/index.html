@@ -32,23 +32,16 @@
 			<div class="layui-side layui-bg-black">
 				<div class="layui-side-scroll">
 					<ul class="layui-nav layui-nav-tree" lay-filter="menu">
+						{{range $key,$value := .Options}}
 						<li class="layui-nav-item">
-							<a href="javascript:;">系统管理</a>
+							<a href="javascript:;">{{$key}}</a>
 							<dl class="layui-nav-child">
-								<dd><a href="user/userList" id="1">用户管理</a></dd>
-								<dd><a href="depart/departList.html" id="2">部门管理</a></dd>
-								<dd><a href="job/jobList.html" id="3">职务管理</a></dd>
-								<dd><a href="process/processList" id="4">流程管理</a></dd>
+								{{range $ind,$elem := $value}}
+								<dd><a href="{{$elem.Url}}" id="{{$ind}}">{{$elem.MenuName}}</a></dd>
+								{{end}}
 							</dl>
 						</li>
-						<li class="layui-nav-item">
-							<a href="javascript:;">教学任务管理</a>
-							<dl class="layui-nav-child">
-								<dd><a href="/mission" id="5">任务消息</a></dd>
-								<dd><a href="/workPlace" id="6">任务模块</a></dd>
-								<dd><a href="/applyPlace" id="7">申请模块</a></dd>
-							</dl>
-						</li>
+						{{end}}
 					</ul>
 				</div>
 			</div>

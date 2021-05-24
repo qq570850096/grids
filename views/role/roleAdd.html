@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<link rel="stylesheet" href="/static/layui/css/layui.css" media="all">
+	</head>
+	<body>
+		
+		<form class="layui-form" onsubmit="return false" style="height: auto; margin-left: 15%;" >
+							  
+			  <div class="layui-form-item">
+				 <label class="layui-form-label">角色名称：</label>
+				  <div class="layui-input-inline">
+					  <input type="text" name="roleName" id="roleName" class="layui-input" required="true">
+				  </div>
+			  </div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">功能权限：</label>
+				<div class="layui-input-inline">
+					<div name="menu" id="menu"></div>
+				</div>
+			</div>
+
+		    <div class="layui-form-item">
+			  <div class="layui-input-block">
+				  <button class="layui-btn" lay-submit lay-filter="addSubmit">立即提交</button>
+				  <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+			  </div>
+		  </div>
+		</form>
+		<script src="/static/layui/layui.js" charset="utf-8"></script>
+
+		<script>
+			//按条件查询
+			var $ = layui.$;
+			function query() {
+				tableIns.reload({
+					where: {
+						roleName: $("#roleName").val(),
+					},
+					page: {
+						curr: 1 //重新从第一页开始
+					}
+				});
+			}
+			$.ajax({
+				url: '/role/listResource',
+				async: false,
+				type: 'GET',
+				success: function (res) {
+					if (res.code == 0) { //成功
+						layui.tree.render({
+							elem: '#menu',
+							data: res.data,
+							id: 'menu',
+							showCheckbox: true
+						});
+					}
+				}
+			});
+			layui.use(['table','tree', 'form','util'], function() {
+				var $ = layui.$;
+				var form = layui.form
+				var tree = layui.tree;
+				var addIds = function (field) {
+					let checkData = tree.getChecked('menu');
+					field.resourceIds = getIds(checkData, []);
+				};
+				function getIds(checkData,arr){
+					for (let i in checkData){
+						arr.push(checkData[i].id);
+						arr = getIds(checkData[i].children,arr);
+					}
+					return arr
+				}
+				form.on('submit(addSubmit)', function (data) {
+					addIds(data.field);
+					console.log(data)
+					$.ajax({
+						url: "/role/Add",
+						async: false,
+						type: 'POST',
+						data: {resourceIds:data.field.resourceIds, roleName:data.field.roleName},
+						success: function (res) {
+							if (res.code == 0) { //成功
+								layer.closeAll();
+								query();
+							} else {
+								layer.alert(res.msg);
+							}
+						}
+					});
+					return false; // 阻止表单跳转
+				});
+			})
+
+
+		</script>
+	</body>
+</html>

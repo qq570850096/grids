@@ -12,6 +12,33 @@ type UserConn struct {
 }
 
 func (c *UserConn) Index() {
+	uid := c.Ctx.GetCookie("userId")
+	uid_int,_ := strconv.Atoi(uid)
+	uid_int = uid_int
+	ops := make(map[string][]models.Menu)
+	var childs []models.Menu
+	var parentName string
+	ur,_ := models.GetUserRoleByUId(10000009)
+	for _,v := range ur {
+		menu_roles,_ := models.GetAllMenuByRid(v.RoleId)
+		for _,x := range menu_roles {
+			menu, _ := models.GetMenuById(x.MenuId)
+			if menu.ParentId == 0 {
+				childs = models.GetAllMenubyParent(menu.Id)
+				parentName = menu.MenuName
+			} else {
+				for _,y := range childs {
+					if menu.Id == y.Id {
+						ops[parentName] = append(ops[parentName],y)
+					}
+
+				}
+			}
+
+		}
+	}
+	fmt.Println(ops)
+	c.Data["Options"] = ops
 	c.TplName = "index.html"
 }
 
@@ -141,4 +168,5 @@ func (c *UserConn) Del() {
 	}
 	c.ServeJSON()
 }
+
 

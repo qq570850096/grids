@@ -11,8 +11,8 @@ import (
 
 type MenuRole struct {
 	Id     int   `orm:"column(id);auto"`
-	MenuId int64 `orm:"column(menuId);null" description:"鑿滃崟Id"`
-	RoleId int64 `orm:"column(roleId);null" description:"瑙掕壊Id"`
+	MenuId int `orm:"column(menuId);null" description:"鑿滃崟Id"`
+	RoleId int `orm:"column(roleId);null" description:"瑙掕壊Id"`
 }
 
 func (t *MenuRole) TableName() string {
@@ -40,6 +40,16 @@ func GetMenuRoleById(id int) (v *MenuRole, err error) {
 		return v, nil
 	}
 	return nil, err
+}
+
+func GetAllMenuByRid(rid int) (v []MenuRole, err error) {
+	o := orm.NewOrm()
+	if _,err := o.QueryTable("menu_role").Filter("roleId",rid).
+		All(&v);err != nil {
+			fmt.Println(err)
+			return nil,err
+	}
+	return
 }
 
 // GetAllMenuRole retrieves all MenuRole matches certain condition. Returns empty list if

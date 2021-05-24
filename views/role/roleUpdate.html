@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<link rel="stylesheet" href="../../static/layui/css/layui.css" media="all">
+	</head>
+	<body>
+		
+		<form class="layui-form" action="" onsubmit="return false" style="height: auto; margin-left: 15%;" >
+		    <div class="layui-form-item">
+		        <div class="layui-input-inline">
+		            <input type="hidden" name="roleId" id="roleId" class="layui-input">
+		        </div>
+		    </div>
+							  
+			  <div class="layui-form-item">
+				 <label class="layui-form-label">角色名称：</label>
+				  <div class="layui-input-inline">
+					  <input type="text" name="roleName" id="roleName" class="layui-input" required="true">
+				  </div>
+			  </div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">功能权限：</label>
+				<div class="layui-input-inline">
+					<div name="menu" id="menu"></div>
+				</div>
+			</div>
+							  
+		    <div class="layui-form-item">
+			  <div class="layui-input-block">
+				  <button class="layui-btn" lay-submit lay-filter="updateSubmit">立即提交</button>
+				  <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+			  </div>
+		  </div>
+		</form>
+		<script src="../../static/layui/layui.js" charset="utf-8"></script>
+		<script src="/static/js/cookie.js"></script>
+		<script>
+			var $ = layui.$;
+			var roleId = getCookie("roleId")
+			$.ajax({
+				url: '/role/listResource?roleId='+roleId,
+				async: false,
+				type: 'GET',
+				success: function (res) {
+					if (res.code == 0) { //成功
+						layui.tree.render({
+							elem: '#menu',
+							data: res.data,
+							id: 'menu',
+							showCheckbox: true
+						});
+					}
+				}
+			});
+			layui.use('form', function(){
+				var form = layui.form;
+				var $ = layui.$;
+				form.on('submit(updateSubmit)', function(data){
+					$.ajax({
+						url:'/role/Update',
+						data: data.field,
+						dataType:'json',
+						type:'post',
+						success:function(data){
+							layer.msg("修改成功")
+							setTimeout(function (){
+								var index=parent.layer.getFrameIndex(window.name); //获取当前窗口的name
+								parent.layer.close(index);
+							},1000);
+						}
+					})
+				});
+			})
+		</script>
+	</body>
+</html>
