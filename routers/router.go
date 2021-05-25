@@ -16,6 +16,7 @@ func init() {
 	beego.Router("/user/Add", &controllers.UserConn{},"*:Add")
 	beego.Router("/user/Add", &controllers.UserConn{},"*:Add")
 	beego.Router("/user/Del", &controllers.UserConn{},"post:Del")
+	beego.Router("/user/login", &controllers.UserConn{},"*:Login")
 
 	beego.Router("/role/roleList", &controllers.RoleCon{},"get:Get")
 	beego.Router("/role/roleListInfo", &controllers.RoleCon{},"get:ListInfo")

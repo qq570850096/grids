@@ -64,6 +64,16 @@ func GetUserById(id int) (v *User, err error) {
 	return nil, err
 }
 
+func Login(username,password string) (v *User, err error) {
+	o := orm.NewOrm()
+	v = &User{UserName:username,Password:password}
+	if err = o.Read(v,"userName","password"); err != nil {
+			fmt.Println(err)
+			return nil,err
+	}
+	return v,err
+}
+
 func GetUserByLevel(dep,job int) (v []User, err error) {
 	o := orm.NewOrm()
 	_,err = o.QueryTable("user").Filter("departId",dep).Filter("jobId",job).All(&v)

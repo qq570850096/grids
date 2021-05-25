@@ -11,14 +11,34 @@ type UserConn struct {
 	MainController
 }
 
+func (c *UserConn) Login() {
+	if c.Ctx.Request.Method == "GET" {
+		c.TplName = "login.html"
+	} else {
+		ret := make(map[string]interface{})
+		username := c.GetString("username")
+		passowrd := c.GetString("password")
+		v,_ := models.Login(username,passowrd)
+		if v != nil {
+			ret["code"] = 0
+			ret["msg"] = "success"
+			ret["userId"] = v.Id
+		} else {
+			ret["code"] = 1
+			ret["msg"] = "failed"
+		}
+		c.Data["json"] = ret
+		c.ServeJSON()
+	}
+}
+
 func (c *UserConn) Index() {
 	uid := c.Ctx.GetCookie("userId")
 	uid_int,_ := strconv.Atoi(uid)
-	uid_int = uid_int
 	ops := make(map[string][]models.Menu)
 	var childs []models.Menu
 	var parentName string
-	ur,_ := models.GetUserRoleByUId(10000009)
+	ur,_ := models.GetUserRoleByUId(uid_int)
 	for _,v := range ur {
 		menu_roles,_ := models.GetAllMenuByRid(v.RoleId)
 		for _,x := range menu_roles {

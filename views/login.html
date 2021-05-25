@@ -74,7 +74,7 @@
 		</style>
 	</head>
 	<body>
-		<form class="layui-form" action="index.html" method="get">
+		<form class="layui-form" onsubmit="return false">
 			<div class="container">
 				<div class="layui-word-aux">
 					<center>
@@ -106,5 +106,28 @@
 		</form>
 		<script src="../static/layui/layui.js" charset="utf-8"></script>
 		<script src="../static/js/login.js"></script>
+	<script src="/static/js/cookie.js"></script>
+	<script>
+		layui.use(['form','element'],function () {
+			var $ = layui.$;
+			var form = layui.form;
+			form.on('submit(login)',function (data) {
+				$.ajax({
+					url: "/user/login",
+					type: 'POST',
+					data: data.field,
+					success: function (res) {
+						if (res.code == 0) {
+							setCookie("userId",res.userId)
+							console.log(12345);
+							window.location.href = "http://localhost:8080/"
+						} else {
+							layui.msg("登陆失败!")
+						}
+					}
+				})
+			})
+		})
+	</script>
 	</body>
 </html>
