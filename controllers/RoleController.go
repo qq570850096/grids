@@ -12,11 +12,6 @@ type RoleCon struct {
 	MainController
 }
 
-type Rolse struct {
-	RoleName string `json:"roleName"`
-	ResourceIds []string `json:"resourceIds[]"`
-}
-
 func (c *RoleCon) Get() {
 	rolelist := models.GetAllRole()
 	id,_ := strconv.Atoi(c.GetString("id"))
@@ -32,9 +27,64 @@ func (c *RoleCon) UpInfo() {
 	if c.Ctx.Request.Method == "GET" {
 		c.TplName = "role/roleUpdate.html"
 	}else {
+		roleId,_ := c.GetInt("roleId")
+		tmps := c.GetStrings("resourceIds[]")
+		rolename := c.GetString("roleName")
+		ids := utils.StringsToInts(tmps)
+		role := models.Role{
+			Id:             roleId,
+			RoleName:       rolename,
+			ModifiedTime:   time.Now(),
+			CreateUserId:   0,
+			ModifiedUserId: 0,
+		}
+		models.UpdateRoleById(&role)
+		models.DeleteMenuRoleByRid(roleId)
+		for _, v := range ids {
+			mr := models.MenuRole{
+				Id:     0,
+				MenuId: v,
+				RoleId: int(roleId),
+			}
+			models.AddMenuRole(&mr)
+		}
+		fmt.Println(ids)
+		ret := make(map[string]interface{})
+		ret["code"] = 0
+		ret["msg"] = "success"
+		c.Data["json"] = ret
+		c.ServeJSON()
 		c.Data["json"] = 0
 		c.ServeJSON()
 	}
+}
+
+func (c *RoleCon) DelRole() {
+	ret := make(map[string]interface{})
+	roleId,_ := c.GetInt("roleId")
+	err := models.DeleteRole(roleId)
+	if err == nil {
+		ret["code"] = 1
+		ret["msg"] = "failed"
+	}
+
+	err = models.DeleteMenuRoleByRid(roleId)
+	if err == nil {
+		ret["code"] = 1
+		ret["msg"] = "failed"
+	}
+	err = models.DeleteUserRoleR(roleId)
+	if err == nil {
+		ret["code"] = 1
+		ret["msg"] = "failed"
+	}
+
+	ret["code"] = 0
+	ret["msg"] = "success"
+	c.Data["json"] = ret
+	c.ServeJSON()
+	c.Data["json"] = 0
+	c.ServeJSON()
 }
 
 func (c *RoleCon) ListInfo() {

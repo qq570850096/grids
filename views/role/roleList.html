@@ -142,15 +142,16 @@
 							layer.close(index);
 							var $ = layui.$;
 							$.ajax({
-								url: "/role/Del?id=" + obj.data.Id,
+								url: "/role/del?roleId=" + obj.data.Id,
 								async: false,
 								type: 'POST',
 								success: function(res) {
-									if (res == 1) { //成功
+									if (res.code == 0) { //成功
 										obj.del();
 										layer.alert("删除成功");
 									} else {
 										layer.alert("删除失败");
+										layui.msg(res.msg)
 										//layer.alert("res.msg");
 									}
 								},
@@ -188,7 +189,10 @@
 						type: 2, //表示其为页面层
 						title: '新增角色',
 						area: ['800px', '450px'], //宽高
-						content: '/role/Add' //弹出的内容
+						content: '/role/Add', //弹出的内容
+						end: function () {
+							location.reload()
+						}
 					})
 				});
 			});

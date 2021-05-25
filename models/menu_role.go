@@ -159,3 +159,13 @@ func DeleteMenuRole(id int) (err error) {
 	}
 	return
 }
+
+func DeleteMenuRoleByRid(rid int) (err error) {
+	o := orm.NewOrm()
+	if _,err := o.QueryTable("menu_role").Filter("roleId",rid).
+		Delete();err != nil {
+		fmt.Println(err)
+		return err
+	}
+	return nil
+}

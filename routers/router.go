@@ -49,4 +49,5 @@ func init() {
 	beego.Router("/role/Update",&controllers.RoleCon{},"*:UpInfo")
 	beego.Router("/role/listResource",&controllers.RoleCon{},"get:GetMenu")
 	beego.Router("/role/list",&controllers.RoleCon{},"get:GetRoleList")
+	beego.Router("/role/del",&controllers.RoleCon{},"post:DelRole")
 }

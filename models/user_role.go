@@ -169,3 +169,13 @@ func GetUr(userid int)(rolelist []Role){
 	}
 	return rolelist
 }
+
+func DeleteUserRoleR(rid int) (err error) {
+	o := orm.NewOrm()
+	if _,err = o.QueryTable("user_role").Filter("roleId",rid).
+		Delete();err != nil {
+			fmt.Println(err)
+			return err
+	}
+	return nil
+}

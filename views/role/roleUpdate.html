@@ -58,10 +58,23 @@
 			layui.use('form', function(){
 				var form = layui.form;
 				var $ = layui.$;
+				var tree = layui.tree;
+				var addIds = function (field) {
+					let checkData = tree.getChecked('menu');
+					field.resourceIds = getIds(checkData, []);
+				};
+				function getIds(checkData,arr){
+					for (let i in checkData){
+						arr.push(checkData[i].id);
+						arr = getIds(checkData[i].children,arr);
+					}
+					return arr
+				}
 				form.on('submit(updateSubmit)', function(data){
+					addIds(data.field);
 					$.ajax({
 						url:'/role/Update',
-						data: data.field,
+						data: {roleId: data.field.roleId,resourceIds:data.field.resourceIds, roleName:data.field.roleName},
 						dataType:'json',
 						type:'post',
 						success:function(data){
